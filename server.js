@@ -1,12 +1,20 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
+const cors = require('cors');
 const app = express();
 const port = 3000;
+const connectionString = 'mongodb+srv://semizerogravity:8r2YJGcUohHE8PlP@cluster0.dlirukz.mongodb.net/?retryWrites=true&w=majority'
 
-// Connect to MongoDB Atlas (replace YOUR_CONNECTION_STRING with your actual connection string)
-mongoose.connect('YOUR_CONNECTION_STRING', { useNewUrlParser: true, useUnifiedTopology: true });
+app.use(cors());
+
+mongoose.connect(connectionString, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
+
+
+app.get('/', (req, res) => {
+    res.send('HI Sachi');
+});
+
 
 // Check MongoDB connection
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -18,24 +26,34 @@ db.once('open', function () {
 const productSchema = new mongoose.Schema({
     name: String,
     price: Number,
-    // Add other fields as needed
+    location: String,
 });
 
 const Product = mongoose.model('Product', productSchema);
+
 
 // API endpoint for searching products
 app.get('/search', async (req, res) => {
     const searchTerm = req.query.term;
 
     try {
-        // Use a regular expression for case-insensitive search
-        const regex = new RegExp(searchTerm, 'i');
+        // Escape special characters in the search term
+        const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escapedSearchTerm, 'i');
         const results = await Product.find({ name: regex });
+
+        if (results.length === 0) {
+            throw new Error('No results found');
+        }
 
         res.json(results);
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        if (error.message === 'No results found') {
+            res.status(404).json({ error: 'No results found' });
+        } else {
+            console.error(error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 });
 

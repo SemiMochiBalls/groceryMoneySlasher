@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Grocery List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #groceryList {
+            margin-top: 20px;
+        }
+        #groceryList li {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Grocery List</h1>
+    <input type="text" id="groceryInput" placeholder="Add an item">
+    <button id="addButton">Add</button>
+    <button id="backButton">Back</button>
+    <ul id="groceryList"></ul>
+
+    <script>
+        document.getElementById('addButton').addEventListener('click', addItem);
+        document.getElementById('groceryInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addItem();
+            }
+        });
+
+        function addItem() {
+            var groceryInput = document.getElementById('groceryInput');
+            var groceryList = document.getElementById('groceryList');
+
+            var newItem = document.createElement('li');
+            newItem.textContent = groceryInput.value;
+
+            var deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.addEventListener('click', function() {
+                groceryList.removeChild(newItem);
+            });
+
+            newItem.appendChild(deleteButton);
+            groceryList.appendChild(newItem);
+            groceryInput.value = '';
+        }
+        document.getElementById('backButton').addEventListener('click', function() {
+        history.back();
+        });
+    </script>
+</body>
+</html>
