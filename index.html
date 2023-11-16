@@ -25,6 +25,8 @@
             <button id="searchButton">Search</button>
         </div>
     </section>
+
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var searchInput = document.getElementById('searchInput');
@@ -32,10 +34,12 @@
     
             searchButton.addEventListener('click', function() {
                 var userInput = searchInput.value.trim();
-    
+                //if user input is not empty then fetch data
                 if (userInput !== '') {
+                    //fetching data from the server
                     fetch(`http://localhost:3000/search?term=${userInput}`)
                         .then(response => {
+                            //if the response is not ok then throw an error
                             if (!response.ok) {
                                 throw new Error(`Server returned ${response.status}: ${response.statusText}`);
                             }
@@ -45,7 +49,7 @@
                             if (data.length === 0) {
                                 alert('No results found');
                             } else {
-                                // Handle the data (replace this with your logic)
+                                // this is where the code for displaying the results will go
                                 console.log('Search results:', data);
                             }
                         })
@@ -54,6 +58,7 @@
                             alert('An error occurred. Please try again.');
                         });
                 } else {
+                    //if user input is empty then alert the user
                     alert('Please enter a search term.');
                 }
             });
@@ -61,7 +66,7 @@
     </script>
 
 <footer>
-    <p>&copy; 2023 Price Slasher. All rights reserved.</p>
+    <p>&copy; 2023 Price Slasher. All rights reserved. For software development</p>
 </footer>
 
 </body>
