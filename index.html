@@ -12,7 +12,7 @@
     <h1>Price Slasher</h1>
     <nav>
         <ul>
-            <li><a href="grocery_list.html">Grocery List</a></li>
+            <li><a href="groceryList.html">Grocery List</a></li>
             <li><a href="login.html">Login</a></li>
             <li><a href="#">Admin Panel</a></li>
         </ul>
@@ -24,16 +24,22 @@
             <input type="text" id="searchInput" placeholder="Search for products...">
             <button id="searchButton">Search</button>
         </div>
+        <div id="results" class="results-container">
+        </div>
     </section>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var searchInput = document.getElementById('searchInput');
             var searchButton = document.getElementById('searchButton');
-    
+            var resultsDiv = document.getElementById('results');
+
             searchButton.addEventListener('click', function() {
                 var userInput = searchInput.value.trim();
-    
+
                 if (userInput !== '') {
+                    // Clear the results div
+                    resultsDiv.innerHTML = '';
+
                     fetch(`http://localhost:3000/search?term=${userInput}`)
                         .then(response => {
                             if (!response.ok) {
@@ -45,8 +51,28 @@
                             if (data.length === 0) {
                                 alert('No results found');
                             } else {
-                                // Handle the data (replace this with your logic)
-                                console.log('Search results:', data);
+                                // Sort the data by price in ascending order
+                                data.sort((a, b) => a.price - b.price);
+
+                                // Display the data
+                                data.forEach(item => {
+                                    var div = document.createElement('div');
+                                    div.classList.add('result-item');
+
+                                    var name = document.createElement('p');
+                                    name.textContent = `Name: ${item.name}`;
+                                    div.appendChild(name);
+
+                                    var price = document.createElement('p');
+                                    price.textContent = `Price: ${item.price}`;
+                                    div.appendChild(price);
+
+                                    var location = document.createElement('p');
+                                    location.textContent = `Location: ${item.location}`;
+                                    div.appendChild(location);
+
+                                    resultsDiv.appendChild(div);
+                                });
                             }
                         })
                         .catch(error => {
@@ -58,7 +84,7 @@
                 }
             });
         });
-    </script>
+        </script>
 
 <footer>
     <p>&copy; 2023 Price Slasher. All rights reserved.</p>
