@@ -27,6 +27,8 @@
         <div id="results" class="results-container">
         </div>
     </section>
+
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var searchInput = document.getElementById('searchInput');
@@ -42,6 +44,7 @@
 
                     fetch(`http://localhost:3000/search?term=${userInput}`)
                         .then(response => {
+                            //if the response is not ok then throw an error
                             if (!response.ok) {
                                 throw new Error(`Server returned ${response.status}: ${response.statusText}`);
                             }
@@ -80,6 +83,7 @@
                             alert('An error occurred. Please try again.');
                         });
                 } else {
+                    //if user input is empty then alert the user
                     alert('Please enter a search term.');
                 }
             });
@@ -87,7 +91,7 @@
         </script>
 
 <footer>
-    <p>&copy; 2023 Price Slasher. All rights reserved.</p>
+    <p>&copy; 2023 Price Slasher. All rights reserved. For software development</p>
 </footer>
 
 </body>

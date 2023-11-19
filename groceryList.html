@@ -2,17 +2,7 @@
 <html>
 <head>
     <title>Grocery List</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        #groceryList {
-            margin-top: 20px;
-        }
-        #groceryList li {
-            margin-bottom: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="glstyles.css">
 </head>
 <body>
     <h1>Grocery List</h1>
@@ -30,6 +20,7 @@
         });
 
         function addItem() {
+            //variables for containing lists
             var groceryInput = document.getElementById('groceryInput');
             var groceryList = document.getElementById('groceryList');
 
